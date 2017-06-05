@@ -1,0 +1,39 @@
+STDOUT equ 1					;STDOUT constant defined. It is the value of the standard output file descriptor.
+SYS_WRITE equ 4					;SYS_WRITE constant defined. It is the ID of the sys_write system call.
+
+extern displayReturnValue32		;displayReturnValue32 is declared extern so that from assembly can invoke it.
+
+
+section .text
+	global _print32 			;_print is marked global so that from C code can call it.
+
+	
+;As per x86-32 bit calling convention the parameters are pushed in reverse order.
+;So since the _print32( length , freakMessage).
+;Then stack will be like
+;						[	freakMessage	]	{+12}
+;						[	length      	]	{+8} 4byte integer
+
+_print32:
+	push ebp 					;Callee Rule. Push previous stack frame base pointer
+	mov ebp,esp					;Callee Rule. setting up base of new stack frame
+
+	mov ecx,[ebp+12] 			;taking argument message. Since stack grows downward
+	mov edx,[ebp+8] 			;taking argument length
+	
+	mov eax,SYS_WRITE			;
+	mov ebx,STDOUT				;
+
+	int 0x80					;make the system call.
+	
+	
+	
+
+	push eax					;saving eax before invoking function because eax is caller saved register.
+
+	call displayReturnValue32	;Call the C function to display the return value.
+	mov esp,ebp					;Restore Extended Stack pointer
+	pop ebp						;Restore Extended Base pointer
+	
+	
+ret

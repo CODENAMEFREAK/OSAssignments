@@ -1,0 +1,83 @@
+/*
+ ============================================================================
+ Name        : FThLTestApplication.c
+ Author      : Anubhav Guleria
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "FreakThread.h"
+
+
+int my_task_1(void * arg)
+{
+
+	char * incoming_Message = (char*)arg;
+	for(int i=1;i<5;i++)
+	{
+			printf("%s",incoming_Message);
+			sleep(5);
+			scheduleNext();
+	}
+	return EXIT_SUCCESS;
+}
+
+int my_task_2(void * arg)
+{
+	int *incomingValue =(int *)arg;
+	for(int i=1;i<15;i++)
+	{
+			printf("My Task 2: %d\n",*incomingValue);
+			sleep(5);
+			scheduleNext();
+	}
+	return EXIT_SUCCESS;
+}
+
+int my_task_3(void * arg)
+{
+
+	char * incoming_Message = (char*)arg;
+	for(int i=1;i<10;i++)
+	{
+			printf("%s",incoming_Message);
+			sleep(5);
+			scheduleNext();
+	}
+	return EXIT_SUCCESS;
+}
+
+
+int main(int argc, char * argv[]) {
+
+	printf("%d\n",getpid());
+	int a=12;
+	char * messageT1="My Task 1\n";
+	int * messageT2 = &a;
+	char * messageT3 = "My Task 3\n";
+	int myUserThreadID_1 = create_freak_thread(my_task_1, messageT1);
+	int myUserThreadID_2 = create_freak_thread(my_task_2, messageT2);
+	int myUserThreadID_3 = create_freak_thread(my_task_3, messageT3);
+
+	printf("UserThreadID 1\t%d\n",myUserThreadID_1);
+	printf("UserThreadID 2\t%d\n",myUserThreadID_2);
+	printf("UserThreadID 3\t%d\n",myUserThreadID_3);
+
+	//showList();
+	int numTimesMainThreadVisit = 50;
+	play(numTimesMainThreadVisit);
+	//scheduleNext();
+	//showList();
+	/*for(int i=1;i<=20;i++){
+		printf("Main\n");
+		scheduleNext();
+
+	}*/
+
+	printf("\nMain completed execution.\n");
+	return EXIT_SUCCESS;
+}

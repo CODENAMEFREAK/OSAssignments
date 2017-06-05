@@ -1,0 +1,39 @@
+						###########################################################################
+						#||||||| Making System Call for 32 bit |||||||||||||||||||||||||||||||||||#
+						###########################################################################
+
+
+						---------------------------------------------------------------------------
+						|							Code Flow									  |
+						---------------------------------------------------------------------------
+						
+						1) From FreakApplication.c. invokes the wrapper function freakPrint32. 
+   							(instead of printf).
+
+						2) Definition of freakPrintMe is present in "FreakWrapper/freakWrapper32.h".
+							(this acts as wrapper library).
+														
+						3) In this wrapper there is definition of freakPrint32 which does the argument 
+						   validation (null check), and pass the message pointer and the calculated length  
+						   to the assembly language method freakPrint.
+						   
+						4) After making the system call this assembly routine invokes the C function to 
+							display the return value.
+						
+						
+						---------------------------------------------------------------------------
+						|							Compiling and Linking						  |
+						---------------------------------------------------------------------------
+						
+						1) First generate object file for freakPrintSyscall.asm.
+						
+								nasm -f elf64 freakPrintSyscall.asm -o freakprint.o
+								
+							This will generate freakprint.o object file.
+								
+						2) Next compile FreakApplication.c and link it with freakprint.o. 		
+						
+								gcc FreakAplication.c ./FreakWrapper/freakprint.o  -o finalout								
+						
+
+						###########################################################################

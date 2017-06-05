@@ -1,0 +1,34 @@
+STDOUT equ 1 					;STDOUT constant defined. It is the value of the standard output file descriptor.
+SYS_WRITE equ 1
+SYS_EXIT equ 60
+
+
+extern displayReturnValue		;displayReturnValue is declared extern so that from assembly can invoke it.
+
+
+section .text
+global freakPrint 				;freakPrint is marked global so that from C code can call it.
+
+;_start:
+;	mov rdi,11	;placing in first argument length
+;	mov rsi,testMessage ; Placing in second argument message
+
+;	call freakPrint ; now invoking subroutine
+
+;	mov rax, SYS_EXIT
+;	syscall
+
+freakPrint:
+	mov r8,rdi
+	mov r9,rsi
+	mov rax,SYS_WRITE
+	mov rdi,STDOUT
+	mov rsi,r9
+	mov rdx,r8
+	syscall
+
+	; at this point return value will be present in rax register
+	; Now Invoke C function 
+	mov rdi,rax ; move rax to first argument
+	call displayReturnValue
+ret

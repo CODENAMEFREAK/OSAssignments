@@ -1,0 +1,23 @@
+						###########################################################################
+						#||||||| Making System Call for 64 bit |||||||||||||||||||||||||||||||||||#
+						###########################################################################
+
+
+						---------------------------------------------------------------------------
+						|							Code Flow									  |
+						---------------------------------------------------------------------------
+						
+						1) From FreakApplication.c. invokes the wrapper function freakPrintMe. 
+   							(instead of printf).
+
+						2) Definition of freakPrintMe is present in "FreakWrapper/freakWrapper.h".
+							(this acts as wrapper library).
+														
+						3) In this wrapper there is definition of freakPrintMe which does the argument 
+						   validation (null check), and pass the message pointer and the calculated length  
+						   to the assembly language method freakPrint.
+						   
+						4)    
+						
+
+###########################################################################

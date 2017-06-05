@@ -1,0 +1,100 @@
+/*
+ ============================================================================
+ Name        : FThLTestApplication.c
+ Author      : Anubhav Guleria
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "FreakThread.h"
+
+
+
+void my_task_1(void * arg)
+{
+	char * incoming_Message = (char*)arg;
+	int i;
+	while(1)
+	{
+
+		for(i=1;i<=NUM_TIMES_LOOP;i++){
+			getTimeStamp();
+			printf("%s",incoming_Message);
+		}
+		sleep(1);
+		scheduleNext();
+	}
+}
+
+void my_task_2(void * arg)
+{
+	int *incomingValue =(int *)arg;
+	int i;
+	while(1)
+		{
+		for(i=1;i<=NUM_TIMES_LOOP;i++)
+		{
+			getTimeStamp();
+			printf("My Task 2: %d\n",*incomingValue);
+		}
+		sleep(1);
+		scheduleNext();
+		}
+
+}
+
+void my_task_3(void * arg)
+{
+
+	char * incoming_Message = (char*)arg;
+	int i;
+	while(1)
+		{
+		for(i=1;i<=NUM_TIMES_LOOP;i++)
+		{
+			getTimeStamp();
+			printf("%s",incoming_Message);
+		}
+			sleep(1);
+			scheduleNext();
+		}
+
+}
+
+
+int main(int argc, char * argv[]) {
+
+	getTimeStamp();
+	printf("Main Process ID\t%d.\n",getpid());
+	sleep(2);
+	int a=12;
+	char * messageT1="My Task 1\n";
+	int * messageT2 = &a;
+	char * messageT3 = "My Task 3\n";
+	int myUserThreadID_1 = create_freak_thread(my_task_1, messageT1);
+	getTimeStamp();
+	printf("Created User Thread with ID:\t%d\n",myUserThreadID_1);
+
+	int myUserThreadID_2 = create_freak_thread(my_task_2, messageT2);
+	getTimeStamp();
+	printf("Created User Thread with ID:\t%d\n",myUserThreadID_2);
+
+	int myUserThreadID_3 = create_freak_thread(my_task_3, messageT3);
+	getTimeStamp();
+	printf("Created User Thread with ID:\t%d\n",myUserThreadID_3);
+
+	showList();
+
+	getTimeStamp();
+	printf("Initiating thread play.");
+	int numTimesMainThreadVisit =50;
+	play(numTimesMainThreadVisit);
+
+	getTimeStamp();
+	printf("Main completed execution.\n");
+	return EXIT_SUCCESS;
+}

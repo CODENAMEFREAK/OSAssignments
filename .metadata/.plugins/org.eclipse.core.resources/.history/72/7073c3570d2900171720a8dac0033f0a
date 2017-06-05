@@ -1,0 +1,33 @@
+STDOUT equ 1					;STDOUT constant defined. It is the value of the standard output file descriptor.
+SYS_WRITE equ 4					;SYS_WRITE constant defined. It is the ID of the sys_write system call.
+
+extern displayReturnValue32		;displayReturnValue32 is declared extern so that from assembly can invoke it.
+
+
+section .text
+	global _print32 			;_print is marked global so that from C code can call it.
+
+	
+
+_print32:
+	push ebp 					;push previous stack frame base pointer
+	mov ebp,esp					;setting up base of new stack frame
+	mov ecx,[ebp+12] 			;taking argument message
+	mov edx,[ebp+8] 			;taking argument length
+	
+	mov eax,SYS_WRITE			;
+	mov ebx,STDOUT				;
+
+	int 0x80					;
+	
+	
+	push eax					;make the system call.
+
+
+	
+	call displayReturnValue32	;
+	mov esp,ebp					;Restore Extended Stack pointer
+	pop ebp						;Restore Extended Base pointer
+	
+	
+ret

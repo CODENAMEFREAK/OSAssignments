@@ -1,0 +1,44 @@
+
+
+
+########################################################
+#		To see set_affinity working or not     #
+########################################################
+1) Run in separate console "top" and then press 1.	  	
+2) Then comment out "beginAll=true;" in MainEngineBusyWaitTester.cpp.
+3) Also change in set_affinity the cpuset such that all
+ 	the producer and consumers are on same set.
+4) Now you can see the rise in CPU usage for those cores.
+
+NOTE: You can also use "htop" instead of top.(No need to 
+	  press 1 in 1st step then).
+	  I have added the screenshots (in screenshot directory).
+########################################################
+
+
+##########################################################################################################################################################################################################
+#							Problem 1 Solution					   											 #
+##########################################################################################################################################################################################################
+nasm -f elf64 TestandSet.asm
+Compile with:	g++ -std=c++11 MainEngineBusyWaitTester.cpp TestAndSet.o -pthread
+
+Working:
+	1) Program will automatically identify the number of "Logical Cores" in the hardware.
+	2) Then it creates 2 sets of cpu's "producercpuset" and "consumercpuset".Even numbered cores are placed into producer set and odd numbered into consumer.
+	3) Then program initializes a buffer of size (number of Logical Cores)^2. 
+	   And number_of_producers = number_of_consumers = buffersize/2.
+	4) All the producers are set to producercpuset and all the consumers to the consumercpuset. 	
+	5) Each of the producer thread Produce an element into the buffer,then displays the content of the buffer and after that sleeps for a random amount of time. If the buffer is already full
+		it waits on condition variable "cond_buff_Not_Full" and gives up its lock untill a consumer wakes it up. Each producer threads runs in infinite loop.
+	6) Each of the consumer thread consume an element from the buffer,then displays the content of the buffer and after that sleeps for a random amount of time. If the buffer is already empty
+		it waits on condition variable "cond_buff_Not_Empty" and gives up its lock untill a producer wakes it up.Each consumer threads runs in infinite loop.
+	7) There are two protected procedures int the Monitor "int produceToBuffer(int item)" int produceToBuffer(int item) and  int consumeFromBuffer().
+	8)There are two condition variables in the monitor : cond_buff_Not_Empty and cond_buff_Not_Full.
+	
+
+NOTE: I have added the screenshots (in screenshot directory) of it's execution on Intel 6th generation processor (i7 6700K). 8 logical cores.
+      So program started 64 buffer size, 32 producer threads and 32 consumer threads.4 logical cores to producer and 4 logical cores to consumer.
+      I killed the program after it's successful execution for 10 minutes.
+      Screenshots are in screenshots folder. See the htop terminal showing the per core load.	
+
+###########################################################################################################################################################################################################

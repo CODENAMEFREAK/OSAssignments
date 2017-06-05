@@ -1,0 +1,35 @@
+						###########################################################################
+						#|||||||||||| User Space Thread Library|||||||||||||||||||||||||||||||||||#
+						###########################################################################
+						
+						---------------------------------------------------------------------------
+						|							Compiling and Linking						  |
+						---------------------------------------------------------------------------
+						
+						1) Compile with 
+						
+								gcc -w FreakThread.c FreakTimeLogger.c FTLTestApplication.c -o finalout
+								gcc -w -m32 FreakThread.c FreakTimeLogger.c FTLTestApplication.c -o finalout								
+							
+								
+						2) Next to see that the threads are only created in the user space and are not visible. 		
+						   at the kernel level run following command to see the process tree .You will get the 
+						   process id of the current process at the starting.
+						   In other terminal execute following
+						
+								watch -n 1 pstree -h <process ID>							
+						
+						3) Then in Project Assignment_2_Clone_Test. First compile with 
+								gcc SampleClone.c
+							then execute. And see the process id.	
+							Then in other terminal see the result of
+								watch -n 1 pstree -h <process ID>
+								
+						3) Then in Project Assignment_2_Pthread_Test. First compile with 
+								gcc SamplePThreads.c -lpthread
+							then execute. And see the process id.	
+							Then in other terminal see the result of
+								watch -n 1 pstree -h <process ID>																
+						
+						NOTE: See the difference between 2 ,3 and 4.						
+						###########################################################################

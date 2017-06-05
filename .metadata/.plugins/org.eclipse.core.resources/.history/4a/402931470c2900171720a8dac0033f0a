@@ -1,0 +1,40 @@
+extern displayReturnValue32
+SYS_WRITE equ 4
+STDOUT equ 1
+section .data
+	message db "Chal Gaya",10
+section .text
+	global _print32
+_start:
+	call _print32
+
+	mov eax,1
+	int 0x80
+	
+
+_print32:
+	
+	push ebp ;push previous stack frame base pointer
+	mov ebp,esp;setting up base of new stack frame	
+	mov ecx,[ebp+12] ; taking argument message	
+	mov edx,[ebp+8] ;taking argument length
+	
+	mov eax,SYS_WRITE
+	mov ebx,STDOUT
+
+	int 0x80
+	
+	
+	push eax
+;mov ecx, eax
+;mov edx,4
+;	mov eax,SYS_WRITE
+;	mov ebx,STDOUT
+
+	
+	call displayReturnValue32
+	mov esp,ebp;Restore Extended Stack pointer
+	pop ebp;Restore Extended Base pointer
+	
+	
+ret
