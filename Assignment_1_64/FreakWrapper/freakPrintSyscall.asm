@@ -23,10 +23,10 @@ global freakPrint 				;freakPrint is marked global so that from C code can call 
 
 freakPrint:						;freakPrint is invoked as (length , messagePtr).
 	mov r8,rdi					;1st argument i.e. length is moved to r8.
-	mov r9,rsi					;2nd argument i.e. message pointer is moved to r9.
+	;mov r9,rsi					;2nd argument i.e. message pointer is moved to r9.
 	mov rax,SYS_WRITE			;SYS_CALL ID of SYS_WRITE copied to rax.
 	mov rdi,STDOUT				;filedescriptor is copied to rdi.
-	mov rsi,r9					;message pointer is copied to rsi.
+	;mov rsi,r9					;message pointer is copied to rsi.
 	mov rdx,r8					;length is copied to rdx.
 	syscall						;make the system call.
 
